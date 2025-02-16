@@ -14,7 +14,7 @@ This project is a work-in-progress robot car that will be controlled using hand 
 ## Project Structure
 ```
 ├── main.py    # Gesture detection and hand tracking logic
-├── robot_control.py  # Handles communication with Arduino (planned feature)
+├── arduino.py  # Handles communication with Arduino (planned feature)
 └── README.md  # Project documentation and instructions
 ```
 
