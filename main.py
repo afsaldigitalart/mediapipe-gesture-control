@@ -17,6 +17,7 @@ def palm_open(landmarks):
 
     return open_fingers >= 4 
 
+print("LOADING, PLEASE WAIT")
 
 mp_hands = mp.solutions.hands
 mp_draw = mp.solutions.drawing_utils
@@ -34,7 +35,8 @@ while cap.isOpened():
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     results = hands.process(rgb_frame)
-
+    cv2.putText(frame, "Press Esc to Stop", (450,450), cv2.FONT_HERSHEY_PLAIN, 1, (255,15,0), 1, cv2.LINE_AA)
+        
     if results.multi_hand_landmarks:
         for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
             if handedness.classification[0].label == "Right":
@@ -53,7 +55,7 @@ while cap.isOpened():
                 
                 if index.x < wrist.x - pointing_threshold and index.x < index_base.x  - pointing_threshold  and index.x < middle_base.x - pointing_threshold :  # Tip is above the base
                         cv2.putText(frame, "Pointing Left", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
-                                    1, (0, 255, 0), 2, cv2.LINE_AA)
+                                    1, (0, 0 ,255), 2, cv2.LINE_AA)
                 elif index.x > wrist.x  and index.x > index_base.x - pointing_threshold  and index.x - pointing_threshold  > middle_base.x - pointing_threshold  :  # Tip is below the base
                         cv2.putText(frame, "Pointing Right", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 0, 255), 2, cv2.LINE_AA)
@@ -69,9 +71,7 @@ while cap.isOpened():
                                     1, (0, 255, 0), 2, cv2.LINE_AA, )
                     
 
-
     cv2.imshow("Hand Tracking AI", frame)
-
     if cv2.waitKey(1) & 0xFF == 27:
         break
 
