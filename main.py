@@ -39,7 +39,7 @@ while cap.isOpened():
         
     if results.multi_hand_landmarks:
         for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-            if handedness.classification[0].label == "Right":
+            if handedness.classification[0].label == "Right" :
                 mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS,
                 mp_draw.DrawingSpec(color=(0, 0, 255), thickness=3, circle_radius=2),  
                 mp_draw.DrawingSpec(color=(255, 255, 255), thickness=2))
@@ -47,18 +47,33 @@ while cap.isOpened():
 
                 wrist = hand_landmarks.landmark[0]
                 index = hand_landmarks.landmark[8]
+                index_middle = hand_landmarks.landmark[6]
                 index_base = hand_landmarks.landmark[5]
+                middle =hand_landmarks.landmark[12]
                 middle_base = hand_landmarks.landmark[9]
+                middle_middle = hand_landmarks.landmark[10]
+                ring = hand_landmarks.landmark[16]
+                ring_middle = hand_landmarks.landmark[14]
+                pinky = hand_landmarks.landmark[20]
+                pinky_middle= hand_landmarks.landmark[18]
                 
 
-                pointing_threshold = 0.1
+                pointing_threshold = 0.09
                 
                 if index.x < wrist.x - pointing_threshold and index.x < index_base.x  - pointing_threshold  and index.x < middle_base.x - pointing_threshold :  # Tip is above the base
                         cv2.putText(frame, "Pointing Left", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 0 ,255), 2, cv2.LINE_AA)
-                elif index.x > wrist.x  and index.x > index_base.x - pointing_threshold  and index.x - pointing_threshold  > middle_base.x - pointing_threshold  :  # Tip is below the base
+                
+
+                elif index.y > index_middle.y  and ring.y > ring_middle.y and pinky.y > pinky_middle.y and middle.y < middle_middle.y :
+                        cv2.putText(frame, "not nice :(", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
+                                    1, (0, 0, 255), 2, cv2.LINE_AA)
+                
+
+                elif index.x > wrist.x - pointing_threshold  and index.x > index_base.x - pointing_threshold  and index.x - pointing_threshold  > middle_base.x - pointing_threshold  :  # Tip is below the base
                         cv2.putText(frame, "Pointing Right", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 0, 255), 2, cv2.LINE_AA)
+                
                     
                 else:
 
