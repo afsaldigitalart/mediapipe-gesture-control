@@ -1,7 +1,10 @@
 import cv2
 import mediapipe as mp
 
-
+"""
+This function checks whether the palm is open or close and return landmarks
+if open
+"""
 def palm_open(landmarks):
     tip_ids = [4, 8, 12, 16, 20]  
     pip_ids = [3, 6, 10, 14, 18]  
@@ -19,6 +22,7 @@ def palm_open(landmarks):
 
 print("LOADING, PLEASE WAIT")
 
+#Initializing the Mediapipe Module
 mp_hands = mp.solutions.hands
 mp_draw = mp.solutions.drawing_utils
 hands = mp_hands.Hands(max_num_hands=1,min_detection_confidence=0.5, min_tracking_confidence=0.5)
@@ -39,12 +43,12 @@ while cap.isOpened():
         
     if results.multi_hand_landmarks:
         for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-            if handedness.classification[0].label == "Right" :
+            if handedness.classification[0].label == "Right" : #Disabled left hand as rule based system is working poor on it
                 mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS,
                 mp_draw.DrawingSpec(color=(0, 0, 255), thickness=3, circle_radius=2),  
                 mp_draw.DrawingSpec(color=(255, 255, 255), thickness=2))
 
-
+                #All the major Landmarks
                 wrist = hand_landmarks.landmark[0]
                 index = hand_landmarks.landmark[8]
                 index_middle = hand_landmarks.landmark[6]
@@ -57,24 +61,23 @@ while cap.isOpened():
                 pinky = hand_landmarks.landmark[20]
                 pinky_middle= hand_landmarks.landmark[18]
                 
-
+                #added a threshold to make it less sensitive to gestures  
                 pointing_threshold = 0.09
                 
+
+                #Left Pointing Rule
                 if index.x < wrist.x - pointing_threshold and index.x < index_base.x  - pointing_threshold  and index.x < middle_base.x - pointing_threshold :  # Tip is above the base
                         cv2.putText(frame, "Pointing Left", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 0 ,255), 2, cv2.LINE_AA)
                 
-
-                elif index.y > index_middle.y  and ring.y > ring_middle.y and pinky.y > pinky_middle.y and middle.y < middle_middle.y :
-                        cv2.putText(frame, "not nice :(", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
-                                    1, (0, 0, 255), 2, cv2.LINE_AA)
                 
-
+                #Pointing Right Rule
                 elif index.x > wrist.x - pointing_threshold  and index.x > index_base.x - pointing_threshold  and index.x - pointing_threshold  > middle_base.x - pointing_threshold  :  # Tip is below the base
                         cv2.putText(frame, "Pointing Right", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 0, 255), 2, cv2.LINE_AA)
                 
-                    
+
+                #Checks palm condition
                 else:
 
                     if palm_open(hand_landmarks):
@@ -82,11 +85,11 @@ while cap.isOpened():
                                     1, (0, 255, 0), 2, cv2.LINE_AA)
 
                     else:
-                        if not palm_open(hand_landmarks):cv2.putText(frame, "Palm Closed", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
+                        cv2.putText(frame, "Palm Closed", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 255, 0), 2, cv2.LINE_AA, )
                     
 
-    cv2.imshow("Hand Tracking AI", frame)
+    cv2.imshow("Hand Tracking", frame)
     if cv2.waitKey(1) & 0xFF == 27:
         break
 
