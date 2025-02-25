@@ -1,5 +1,6 @@
 import cv2
 import mediapipe as mp
+from arduino import Arduino
 
 """
 This function checks whether the palm is open or close and return landmarks
@@ -19,6 +20,8 @@ def palm_open(landmarks):
             open_fingers += 1
 
     return open_fingers >= 4 
+
+ard = Arduino()
 
 print("LOADING, PLEASE WAIT")
 
@@ -67,27 +70,36 @@ while cap.isOpened():
 
                 #Left Pointing Rule
                 if index.x < wrist.x - pointing_threshold and index.x < index_base.x  - pointing_threshold  and index.x < middle_base.x - pointing_threshold :  # Tip is above the base
-                        cv2.putText(frame, "Pointing Left", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
+                        cv2.putText(frame, "Moving Left", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 0 ,255), 2, cv2.LINE_AA)
+                        
+                        ard.send_to_arduino("L")
+                        
                 
                 
                 #Pointing Right Rule
                 elif index.x > wrist.x - pointing_threshold  and index.x > index_base.x - pointing_threshold  and index.x - pointing_threshold  > middle_base.x - pointing_threshold  :  # Tip is below the base
-                        cv2.putText(frame, "Pointing Right", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
+                        cv2.putText(frame, "Moving Right", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 0, 255), 2, cv2.LINE_AA)
-                
+
+                        ard.send_to_arduino("R")
 
                 #Checks palm condition
                 else:
 
                     if palm_open(hand_landmarks):
-                        cv2.putText(frame, "Palm Open", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
+                        cv2.putText(frame, "Moving Backward", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 255, 0), 2, cv2.LINE_AA)
 
+                        ard.send_to_arduino("F")
+
                     else:
-                        cv2.putText(frame, "Palm Closed", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
+                        cv2.putText(frame, "Moving Forward", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 255, 0), 2, cv2.LINE_AA, )
-                    
+
+                        ard.send_to_arduino("B")
+    else:
+         ard.send_to_arduino("Q")                
 
     cv2.imshow("Hand Tracking", frame)
     if cv2.waitKey(1) & 0xFF == 27:
