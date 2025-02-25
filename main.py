@@ -91,13 +91,13 @@ while cap.isOpened():
                         cv2.putText(frame, "Moving Backward", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 255, 0), 2, cv2.LINE_AA)
 
-                        ard.send_to_arduino("F")
+                        ard.send_to_arduino("B")
 
                     else:
                         cv2.putText(frame, "Moving Forward", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 255, 0), 2, cv2.LINE_AA, )
 
-                        ard.send_to_arduino("B")
+                        ard.send_to_arduino("F")
     else:
          ard.send_to_arduino("Q")                
 
