@@ -7,7 +7,7 @@ class Arduino():
     def __init__(self):
         #Connects to the Arduino
         self.port = self.checkPort()
-        self.arduino = serial.Serial("COM8", 9600)
+        self.arduino = serial.Serial(self.port, 9600)
 
     def send_to_arduino(self, command):
         try:
@@ -21,6 +21,8 @@ class Arduino():
     def checkPort(self):
 
         ports = serial.tools.list_ports.comports()
+        names = ["arduino", "ch340", "usb serial"]
         for port in ports:
-            if "Arduino" in port.description:
-                return port.device 
+            for name in names:
+                if name in port.description.lower():
+                    return port.device 
