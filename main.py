@@ -98,6 +98,13 @@ while cap.isOpened():
                                     1, (0, 255, 0), 2, cv2.LINE_AA, )
 
                         ard.send_to_arduino("F")
+                        
+            elif handedness.classification[0].label == "Right" and handedness.classification[0].label == "Left":
+                cv2.putText(frame, "Stopping", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
+                                    1, (0, 255, 0), 2, cv2.LINE_AA, )
+
+                ard.send_to_arduino("Q")
+
     else:
          ard.send_to_arduino("Q")                
 

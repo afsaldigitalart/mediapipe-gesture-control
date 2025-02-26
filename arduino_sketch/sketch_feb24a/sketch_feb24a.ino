@@ -8,6 +8,11 @@ AF_DCMotor motor4(4); // Motor 4 on M4
 
 
 void moveFront(){
+  
+  motor1.setSpeed(80);
+  motor2.setSpeed(80);
+  motor3.setSpeed(80);
+  motor4.setSpeed(80);
   motor1.run(FORWARD);
   motor2.run(FORWARD);
   motor3.run(FORWARD);
@@ -16,6 +21,11 @@ void moveFront(){
 }
 
 void moveBack(){
+  
+  motor1.setSpeed(80);
+  motor2.setSpeed(80);
+  motor3.setSpeed(80);
+  motor4.setSpeed(80);
   motor1.run(BACKWARD);
   motor2.run(BACKWARD);
   motor3.run(BACKWARD);
@@ -24,18 +34,26 @@ void moveBack(){
 }
 
 void moveLeft(){
-  motor1.run(BACKWARD);
-  motor2.run(BACKWARD);
-  motor3.run(FORWARD);
-  motor4.run(FORWARD);
-
-}
-
-void moveRight(){
+  motor1.setSpeed(180);
+  motor2.setSpeed(180);
+  motor3.setSpeed(180);
+  motor4.setSpeed(180);
   motor1.run(FORWARD);
   motor2.run(FORWARD);
   motor3.run(BACKWARD);
   motor4.run(BACKWARD);
+
+}
+
+void moveRight(){
+  motor1.setSpeed(180);
+  motor2.setSpeed(180);
+  motor3.setSpeed(180);
+  motor4.setSpeed(180);
+  motor1.run(BACKWARD);
+  motor2.run(BACKWARD);
+  motor3.run(FORWARD);
+  motor4.run(FORWARD);
 }
 
 void stop(){
@@ -48,11 +66,6 @@ void stop(){
 
 void setup() {
   Serial.begin(9600);
-
-  motor1.setSpeed(100);
-  motor2.setSpeed(100);
-  motor3.setSpeed(100);
-  motor4.setSpeed(100);
 }
 
 void loop() {
