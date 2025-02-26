@@ -20,7 +20,7 @@ This project is a gesture-controlled robot car that operates using hand gestures
 ## Dependencies
 Ensure you have the following Python libraries installed before running the project:
 ```bash
-pip install opencv-python mediapipe pyserial
+pip install -r requirements.txt
 ```
 These libraries enable hand tracking, gesture recognition, real-time processing, and serial communication with the Arduino.
 
