@@ -42,8 +42,14 @@ while cap.isOpened():
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     results = hands.process(rgb_frame)
+    cv2.putText(frame, "RIGHT Hand Only!", (450,430), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,255), 1, cv2.LINE_AA)
     cv2.putText(frame, "Press Esc to Stop", (450,450), cv2.FONT_HERSHEY_PLAIN, 1, (255,15,0), 1, cv2.LINE_AA)
-        
+    cv2.putText(frame, "Palm -> Moves Backward", (30,390), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
+    cv2.putText(frame, "Closed Palm -> Moves Forward", (30,410), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
+    cv2.putText(frame, "Point Left -> Moves Left", (30,430), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
+    cv2.putText(frame, "Point Right -> Moves Right", (30,450), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
+    
+
     if results.multi_hand_landmarks:
         for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
             if handedness.classification[0].label == "Right" : #Disabled left hand as rule based system is working poor on it
@@ -79,7 +85,7 @@ while cap.isOpened():
                 
                 #Pointing Right Rule
                 elif index.x > wrist.x - pointing_threshold  and index.x > index_base.x - pointing_threshold  and index.x - pointing_threshold  > middle_base.x - pointing_threshold  :  # Tip is below the base
-                        cv2.putText(frame, "Moving Right", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
+                        cv2.putText(frame, "Moving Right", (50,100), cv2.FONT_HERSHEY_SIMPLEX, 
                                     1, (0, 0, 255), 2, cv2.LINE_AA)
 
                         ard.send_to_arduino("R")
@@ -98,12 +104,6 @@ while cap.isOpened():
                                     1, (0, 255, 0), 2, cv2.LINE_AA, )
 
                         ard.send_to_arduino("F")
-                        
-            elif handedness.classification[0].label == "Right" and handedness.classification[0].label == "Left":
-                cv2.putText(frame, "Stopping", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 
-                                    1, (0, 255, 0), 2, cv2.LINE_AA, )
-
-                ard.send_to_arduino("Q")
 
     else:
          ard.send_to_arduino("Q")                
