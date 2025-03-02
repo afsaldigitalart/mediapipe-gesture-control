@@ -44,8 +44,8 @@ while cap.isOpened():
     results = hands.process(rgb_frame)
     cv2.putText(frame, "RIGHT Hand Only!", (450,430), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,255), 1, cv2.LINE_AA)
     cv2.putText(frame, "Press Esc to Stop", (450,450), cv2.FONT_HERSHEY_PLAIN, 1, (255,15,0), 1, cv2.LINE_AA)
-    cv2.putText(frame, "Palm -> Moves Backward", (30,390), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
-    cv2.putText(frame, "Closed Palm -> Moves Forward", (30,410), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
+    cv2.putText(frame, "Palm -> Moves Backward", (30,410), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
+    cv2.putText(frame, "Closed Palm -> Moves Forward", (30,390), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
     cv2.putText(frame, "Point Left -> Moves Left", (30,430), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
     cv2.putText(frame, "Point Right -> Moves Right", (30,450), cv2.FONT_HERSHEY_PLAIN, 1, (0,0,0), 1, cv2.LINE_AA)
     
